@@ -1,2 +1,2 @@
 # mastercoder_server
-My server config and guide. Contains WireGuard, Pihole, Jellyfin, and NextCloud
+My server configs and guide. Contains WireGuard, Pihole (+Unbound), Prometheus, Nextcloud
