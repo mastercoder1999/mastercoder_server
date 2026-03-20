@@ -121,8 +121,12 @@ Web UI → YES
 http://192.168.1.169:80/admin/network
 
 - PIHOLE DNS
+<img width="1293" height="1198" alt="dns" src="https://github.com/user-attachments/assets/ce1ce60e-be7c-47a5-975c-5e5c66388b98" />
+
 
 - PIHOLE LISTS
+<img width="1288" height="436" alt="list" src="https://github.com/user-attachments/assets/721cf825-09c9-4477-bb9e-b23b9dc5fcb8" />
+
 
 ## WIREGUARD
 ### Install
@@ -179,10 +183,13 @@ net.ipv4.ip_forward=1
 ```
 ## TELUS 
 - Désactiver l'ipv6. (cause des problèmes avec de la confusion de dns)
-image ipv6
+<img width="1169" height="761" alt="ipv6" src="https://github.com/user-attachments/assets/67a210d5-e0a6-47ac-90ac-f6d179301b50" />
+
 
 - Changer le dns local
-image dns
+<img width="1168" height="971" alt="dnslocal" src="https://github.com/user-attachments/assets/977f6726-b9a2-4915-b20a-7233fe0a4ea2" />
+
 
 - Ouvrir le port WireGuard
-image wireguard
+<img width="1167" height="974" alt="portwireguard" src="https://github.com/user-attachments/assets/7317fe80-b501-4a7f-91af-3d196c2ba616" />
+
