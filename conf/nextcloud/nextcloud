@@ -1,0 +1,95 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name cloud.maksexperience.xyz;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name cloud.maksexperience.xyz;
+
+    add_header Strict-Transport-Security "max-age=15552000; includeSubDomains; preload" always;
+
+    root /var/www/nextcloud;
+    index index.php index.html /index.php$request_uri;
+
+    ssl_certificate /etc/letsencrypt/live/cloud.maksexperience.xyz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/cloud.maksexperience.xyz/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    client_max_body_size 512M;
+    client_body_timeout 300s;
+    fastcgi_buffers 64 4K;
+
+    gzip off;
+
+    add_header Referrer-Policy                   "no-referrer"       always;
+    add_header X-Content-Type-Options            "nosniff"           always;
+    add_header X-Frame-Options                   "SAMEORIGIN"        always;
+    add_header X-Permitted-Cross-Domain-Policies "none"              always;
+    add_header X-Robots-Tag                      "noindex, nofollow" always;
+    add_header X-XSS-Protection                  "1; mode=block"     always;
+
+    location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+    }
+
+    location = /.well-known/carddav {
+        return 301 /remote.php/dav/;
+    }
+
+    location = /.well-known/caldav {
+        return 301 /remote.php/dav/;
+    }
+
+    location ^~ /.well-known {
+        return 301 /index.php$request_uri;
+    }
+
+    location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+        deny all;
+    }
+
+    location ~ ^/(?:\.|autotest|occ|issue|indie|db_|console) {
+        deny all;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php$request_uri;
+    }
+
+    location ~ \.php(?:$|/) {
+        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param modHeadersAvailable true;
+        fastcgi_param front_controller_active true;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_intercept_errors on;
+        fastcgi_request_buffering off;
+    }
+
+    location ~ \.(?:css|js|svg|gif|png|jpg|ico|wasm|tflite|map|ogg|flac)$ {
+        try_files $uri /index.php$request_uri;
+        expires 6M;
+        access_log off;
+    }
+
+    location ~ \.(?:woff2?|eot|ttf|otf)$ {
+        try_files $uri /index.php$request_uri;
+        expires 7d;
+        access_log off;
+    }
+
+    location ~ \.(?:mp4|webm)$ {
+        try_files $uri /index.php$request_uri;
+        expires 7d;
+        access_log off;
+    }
+}
